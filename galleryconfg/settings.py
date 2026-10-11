@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 from pathlib import Path
 from decouple import config
 import cloudinary
-
+import cloudinary_storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'photo_gallery',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -55,11 +57,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'galleryconfg.urls'
 
-cloudinary.config (
-    api_key = config('CLOUDINARY_API_KEY'),
-    api_secret = config('CLOUDINARY_API_SECRET'),
-    cloud_name = config('CLOUDINARY_CLOUD_NAME')
-)
+
+CLOUDINARY_STORAGE = {
+    'API_KEY' : config('CLOUDINARY_API_KEY'),
+    'API_SECRET' : config('CLOUDINARY_API_SECRET'),
+    'CLOUD_NAME' : config('CLOUDINARY_CLOUD_NAME'),
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 TEMPLATES = [
     {
@@ -118,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa,Nairobi'
 
 USE_I18N = True
 
