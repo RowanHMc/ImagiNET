@@ -48,3 +48,42 @@ class Photo(models.model):
     def __str__(self):
         return self.title
 
+class PhotoReaction(models.Model):
+    LIKE ='like'
+    DISLIKE = 'dislike'
+
+    REACTION_CHOICES = [
+        (LIKE,'like')
+        (DISLIKE,'dislike'),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='photo_reaction'
+    )
+
+    photo = models.ForeignKey(
+        Photo,
+        on_delete=models.CASCADE,
+        related_name='reactions'
+    )
+
+    reaction = models.CharField(
+        max_length=10,
+        choices=REACTION_CHOICES
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'user',
+                    'photo'
+                ],
+                name= 'unique_user_photo_rection'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.User.username} - {self.photo.title}: {self.reaction}"    
