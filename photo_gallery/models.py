@@ -26,7 +26,7 @@ class Tag(models.Model):
         return self.name
 
 """Photos """
-class Photo(models.model):
+class Photo(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=200, blank=True)
     image = models.ImageField(upload_to='photos/')
@@ -53,27 +53,28 @@ class PhotoReaction(models.Model):
     DISLIKE = 'dislike'
 
     REACTION_CHOICES = [
-        (LIKE,'like')
+        (LIKE,'like'),
         (DISLIKE,'dislike'),
     ]
 
+# connect user to reactions
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='photo_reaction'
     )
-
+# connect reaction to a photo
     photo = models.ForeignKey(
         Photo,
         on_delete=models.CASCADE,
         related_name='reactions'
     )
-
+# saving the reactions
     reaction = models.CharField(
         max_length=10,
         choices=REACTION_CHOICES
     )
-
+# Prevent duplications
     class Meta:
         constraints = [
             models.UniqueConstraint(
