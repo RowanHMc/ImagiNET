@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+</head>
+<body>
+    <h1>Welcome to the Photo Gallery</h1>
+    <p>Explore photos, portraits, and artwork.</p>
+
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+    {% else %}
+        <p>
+            <a href="{% url 'register' %}">Create an account</a>
+        </p>
+    {% endif %}
+
+    <h2>Latest Photos</h2>
+
+    {% for photo in photos %}
+        <article>
+            <h3>{{ photo.title }}</h3>
+            <p>{{ photo.description }}</p>
+            <p>Uploaded by {{ photo.uploader.username }}</p>
+        </article>
+    {% empty %}
+        <p>No photos have been uploaded yet.</p>
+    {% endfor %}
+</body>
+</html>

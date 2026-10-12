@@ -25,13 +25,13 @@ def register(request):
 
     return render(
         request,
-        'registration/register.html',
+        'register.html',
         {'form': form}
     )
 
 # Home page
 def home(request):
     photos = Photo.objects.all().order_by('-created_at')
-    return render(request, 'photo_gallery/home.html', {
+    return render(request, 'home.html', {
         'photos': photos
     })

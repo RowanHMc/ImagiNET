@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+# registration 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     class Meta:
@@ -21,5 +22,23 @@ class RegistrationForm(UserCreationForm):
             )
         return email
 
-
+class PhotoUploadForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields =[
+            'title',
+            'desctiption',
+            'image',
+            'tags'
+        ]
+        widgets ={
+            'title':forms.TextInput(attrs={
+                'placeholder':'Photo Title'
+            }),
+            'description':forms.Textarea(attrs={
+                'placeholder': 'Photo description',
+                'rows':4
+                
+            }),
+        }
 
