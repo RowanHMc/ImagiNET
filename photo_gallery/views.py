@@ -15,14 +15,14 @@ def register(request):
         form = RegistrationForm(request.POST)
 
         if form.is_valid():
-            user = form.save()
-            login(request, user)
+            form.save()
+            # login(request, user)
 
             messages.success(
                 request,
                 "Your account was created successfully"
             )
-            return redirect('home')
+            return redirect('login')
     else:
         form = RegistrationForm()
 

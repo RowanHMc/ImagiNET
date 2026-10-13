@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Photo
+from .models import Photo, Tag
 
 # registration 
 
@@ -45,6 +45,20 @@ class RegistrationForm(UserCreationForm):
 
 
 class PhotoUploadForm(forms.ModelForm):
+    CATEGORIES = [
+        'Wildlife',
+        'Nature',
+        'Geography',
+        'Archeology',
+        'History',
+        'Philosophy',
+        'Technology',
+        'Woodworks',
+        'Construction',
+        'Engineering',
+        'Medicine',  
+
+    ]
     class Meta:
         model = Photo
         fields = [
@@ -59,13 +73,19 @@ class PhotoUploadForm(forms.ModelForm):
             }),
             'description': forms.Textarea(attrs={
                 'placeholder': 'Photo description',
-                'rows': 4
+                'rows': 6
             }),
+            'tags': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+
+        self.fields['tags'].queryset = Tag.objects.filter(
+            name__in=self.CATEGORIES
+        ).order_by('name')
+        
         for field in self.fields.values():
             field.widget.attrs.update({
                 'class': (

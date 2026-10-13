@@ -22,36 +22,42 @@
                 ImagiNet
             </a>
 
-            <nav class="flex flex-wrap items-center gap-4">
-                {% if user.is_authenticated %}
-                    <span class="text-sm text-gray-600">
-                        Welcome, <strong>{{ user.username }}</strong>
-                    </span>
 
-                    <a href="{% url 'upload_photo' %}"
-                       class="rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-700">
-                        Upload a Photo
-                    </a>
+<nav class="flex flex-wrap items-center gap-4">
+    {% if user.is_authenticated %}
 
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-700">
-                            Log Out
-                        </button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}"
-                       class="rounded-lg border border-gray-600 px-4 py-2 text-sm font-semibold text-pink-600 hover:bg-pink-50">
-                        Log In
-                    </a>
+        <span class="text-sm text-gray-600">
+            Welcome, <strong>{{ user.username }}</strong>
+        </span>
 
-                    <a href="{% url 'register' %}"
-                       class="rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-700">
-                        Create an Account
-                    </a>
-                {% endif %}
-            </nav>
+        <a href="{% url 'upload_photo' %}"
+           class="rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-700">
+            Upload a Photo
+        </a>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit"
+                    class="rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-700">
+                Log Out
+            </button>
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'login' %}"
+           class="rounded-lg border border-gray-600 px-4 py-2 text-sm font-semibold text-pink-600 hover:bg-pink-50">
+            Log In
+        </a>
+
+        <a href="{% url 'register' %}"
+           class="rounded-lg bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-700">
+            Create an Account
+        </a>
+
+    {% endif %}
+</nav>
+
 
         </div>
     </header>
