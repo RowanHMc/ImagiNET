@@ -65,8 +65,14 @@ CLOUDINARY_STORAGE = {
     'API_SECRET' : config('CLOUDINARY_API_SECRET'),
     'CLOUD_NAME' : config('CLOUDINARY_CLOUD_NAME'),
 }
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
+STORAGES = {
+    'default': {
+        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+    },
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
