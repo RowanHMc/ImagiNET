@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm, PhotoUploadForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Photo
@@ -97,6 +97,12 @@ def login_view(request):
 
     return render(request, 'login.html')
 
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        messages.success(request, 'You have logged out successfully!')
+        return redirect('home')
 
+    return redirect('home')
 
 

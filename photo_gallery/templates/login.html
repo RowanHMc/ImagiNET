@@ -1,113 +1,107 @@
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Photo Gallery</title>
+{% block title %}Log In | ImagiNet{% endblock %}
 
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+{% block content %}
 
-<body class="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-10">
+<div class="mx-auto w-full max-w-md">
 
-    <main class="w-full max-w-md">
+    <!-- Login Heading -->
+    <div class="mb-8 text-center">
+        <a href="{% url 'home' %}"
+           class="text-3xl font-bold tracking-tight text-gray-700 transition hover:text-pink-700">
+            ImagiNet
+        </a>
 
-        <div class="mb-8 text-center">
-            <a href="{% url 'home' %}"
-               class="text-3xl font-bold tracking-tight text-indigo-600">
-                Photo Gallery
-            </a>
+        <h1 class="mt-6 text-2xl font-bold text-gray-700">
+            Welcome back
+        </h1>
 
-            <h1 class="mt-6 text-2xl font-bold text-gray-900">
-                Welcome back
-            </h1>
+        <p class="mt-2 text-sm text-gray-500">
+            Log in to explore and share beautiful photos.
+        </p>
+    </div>
 
-            <p class="mt-2 text-sm text-gray-500">
-                Log in to explore and share beautiful photos.
-            </p>
-        </div>
+    <!-- Login Card -->
+    <div class="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
 
-        <div class="rounded-2xl bg-white p-8 shadow-lg">
+        <!-- Login Errors -->
+        {% if form.errors %}
+            <div class="mb-5 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-700">
+                Please check your details and try again.
+            </div>
+        {% endif %}
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
 
-            {% if form.errors %}
-                <div class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
-                    Please check your details and try again.
-                </div>
-            {% endif %}
+            <!-- Username -->
+            <div>
+                <label for="username"
+                       class="mb-2 block text-sm font-semibold text-gray-700">
+                    Username
+                </label>
 
-            <form method="POST" class="space-y-5">
-                {% csrf_token %}
-
-                <div>
-                    <label for="username"
-                           class="mb-2 block text-sm font-medium text-gray-700">
-                        Username
-                    </label>
-
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        autocomplete="username"
-                        required
-                        autofocus
-                        placeholder="Enter your username"
-                        class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-                    >
-                </div>
-
-                <div>
-                    <label for="password"
-                           class="mb-2 block text-sm font-medium text-gray-700">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        autocomplete="current-password"
-                        required
-                        placeholder="Enter your password"
-                        class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-                    >
-                </div>
-
-                <button
-                    type="submit"
-                    class="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    autocomplete="username"
+                    required
+                    autofocus
+                    placeholder="Enter your username"
+                    class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-100"
                 >
-                    Log In
-                </button>
-            </form>
+            </div>
 
-            <p class="mt-6 text-center text-sm text-gray-600">
+            <!-- Password -->
+            <div>
+                <label for="password"
+                       class="mb-2 block text-sm font-semibold text-gray-700">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    autocomplete="current-password"
+                    required
+                    placeholder="Enter your password"
+                    class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-100"
+                >
+            </div>
+
+            <!-- Submit Button -->
+            <button
+                type="submit"
+                class="w-full rounded-lg bg-gray-600 px-4 py-3 font-semibold text-white transition duration-200 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+            >
+                Log In
+            </button>
+        </form>
+
+        <!-- Registration Link -->
+        <div class="mt-6 border-t border-gray-100 pt-5 text-center">
+            <p class="text-sm text-gray-600">
                 Don't have an account?
                 <a href="{% url 'register' %}"
-                   class="font-semibold text-indigo-600 hover:text-indigo-800">
+                   class="font-semibold text-pink-600 transition hover:text-pink-800">
                     Create one
                 </a>
             </p>
-
-            <p class="mt-4 text-center text-sm">
-                <a href="{% url 'home' %}"
-                   class="text-gray-500 hover:text-gray-800">
-                    &larr; Back to gallery
-                </a>
-            </p>
-
         </div>
 
-    </main>
+        <!-- Back to Gallery -->
+        <p class="mt-4 text-center text-sm">
+            <a href="{% url 'home' %}"
+               class="text-gray-500 transition hover:text-pink-700">
+                &larr; Back to gallery
+            </a>
+        </p>
 
-</body>
-</html>
+    </div>
+
+</div>
+
+{% endblock %}
