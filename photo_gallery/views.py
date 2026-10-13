@@ -4,7 +4,8 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Photo
-
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
@@ -63,4 +64,39 @@ def home(request):
     return render(request, 'home.html', {
         'photos': photos
     })
+
+@login_required
+def photo_detail(request, photo_id):
+    photo= get_object_or_404(Photo, id=photo_id)
+
+    return render(request, 'photo_detail.html',
+                  {'photo':photo}
+                )
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'You have logged in successfully!')
+            return redirect('home')
+
+        messages.error(request, 'Invalid username or password.')
+
+    return render(request, 'login.html')
+
+
+
 

@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Photo Gallery</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-10">
+
+    <main class="w-full max-w-md">
+
+        <div class="mb-8 text-center">
+            <a href="{% url 'home' %}"
+               class="text-3xl font-bold tracking-tight text-indigo-600">
+                Photo Gallery
+            </a>
+
+            <h1 class="mt-6 text-2xl font-bold text-gray-900">
+                Welcome back
+            </h1>
+
+            <p class="mt-2 text-sm text-gray-500">
+                Log in to explore and share beautiful photos.
+            </p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-8 shadow-lg">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.errors %}
+                <div class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                    Please check your details and try again.
+                </div>
+            {% endif %}
+
+            <form method="POST" class="space-y-5">
+                {% csrf_token %}
+
+                <div>
+                    <label for="username"
+                           class="mb-2 block text-sm font-medium text-gray-700">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        autocomplete="username"
+                        required
+                        autofocus
+                        placeholder="Enter your username"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                    >
+                </div>
+
+                <div>
+                    <label for="password"
+                           class="mb-2 block text-sm font-medium text-gray-700">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                        placeholder="Enter your password"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    Log In
+                </button>
+            </form>
+
+            <p class="mt-6 text-center text-sm text-gray-600">
+                Don't have an account?
+                <a href="{% url 'register' %}"
+                   class="font-semibold text-indigo-600 hover:text-indigo-800">
+                    Create one
+                </a>
+            </p>
+
+            <p class="mt-4 text-center text-sm">
+                <a href="{% url 'home' %}"
+                   class="text-gray-500 hover:text-gray-800">
+                    &larr; Back to gallery
+                </a>
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
