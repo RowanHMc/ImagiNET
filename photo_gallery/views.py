@@ -3,9 +3,10 @@ from .forms import RegistrationForm, PhotoUploadForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Photo
+from .models import Photo, PhotoReaction
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -67,11 +68,29 @@ def home(request):
 
 @login_required
 def photo_detail(request, photo_id):
-    photo= get_object_or_404(Photo, id=photo_id)
+    photo = get_object_or_404(Photo, id=photo_id)
 
-    return render(request, 'photo_detail.html',
-                  {'photo':photo}
-                )
+    likes_count = photo.reactions.filter(
+        reaction=PhotoReaction.LIKE
+    ).count()
+
+    dislikes_count = photo.reactions.filter(
+        reaction=PhotoReaction.DISLIKE
+    ).count()
+
+    user_reaction = None
+
+    if request.user.is_authenticated:
+        user_reaction = photo.reactions.filter(
+            user=request.user
+        ).values_list('reaction', flat=True).first()
+
+    return render(request, 'photo_detail.html', {
+        'photo': photo,
+        'likes_count': likes_count,
+        'dislikes_count': dislikes_count,
+        'user_reaction': user_reaction,
+    })
 
 
 def login_view(request):
@@ -105,4 +124,33 @@ def logout_view(request):
 
     return redirect('home')
 
+@login_required
+@require_POST
+def react_to_photo(request, photo_id):
+    photo = get_object_or_404(Photo, id=photo_id)
+    reaction_type = request.POST.get('reaction')
 
+    if reaction_type not in [
+        PhotoReaction.LIKE,
+        PhotoReaction.DISLIKE,
+    ]:
+        messages.error(request, 'Invalid reaction.')
+        return redirect('photo_detail', photo_id=photo.id)
+
+    reaction, created = PhotoReaction.objects.get_or_create(
+        user=request.user,
+        photo=photo,
+        defaults={'reaction': reaction_type},
+    )
+
+    if created:
+        messages.success(request, 'Your reaction was added.')
+    elif reaction.reaction == reaction_type:
+        reaction.delete()
+        messages.success(request, 'Your reaction was removed.')
+    else:
+        reaction.reaction = reaction_type
+        reaction.save(update_fields=['reaction'])
+        messages.success(request, 'Your reaction was updated.')
+
+    return redirect('photo_detail', photo_id=photo.id)
