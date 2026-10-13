@@ -28,7 +28,7 @@ class Tag(models.Model):
 """Photos """
 class Photo(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField(max_length=200, blank=True)
+    description = models.TextField(max_length=2000, blank=True)
     image = models.ImageField(upload_to='photos/')
 
     uploader = models.ForeignKey(
