@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% load socialaccount %} <!-- 1. LOAD SOCIAL ACCOUNT TAGS -->
+{% load socialaccount %}
+{% load crispy_forms_tags %} <!-- 1. LOAD CRISPY TAGS HERE -->
 
 {% block title %}Log In | ImagiNet{% endblock %}
 
@@ -26,8 +27,9 @@
     <!-- Login Card -->
     <div class="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
 
-        <!-- Login Errors -->
-        {% if form.errors %}
+        <!-- Login Errors (Crispy handles field-specific errors automatically, 
+             but this catch-all block remains useful for global invalid attempts) -->
+        {% if form.non_field_errors or form.errors and not form.non_field_errors %}
             <div class="mb-5 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-700">
                 Please check your details and try again.
             </div>
@@ -56,42 +58,8 @@
         <form method="POST" class="space-y-5">
             {% csrf_token %}
 
-            <!-- Username -->
-            <div>
-                <label for="username"
-                       class="mb-2 block text-sm font-semibold text-gray-700">
-                    Username
-                </label>
-
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    autocomplete="username"
-                    required
-                    autofocus
-                    placeholder="Enter your username"
-                    class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-100"
-                >
-            </div>
-
-            <!-- Password -->
-            <div>
-                <label for="password"
-                       class="mb-2 block text-sm font-semibold text-gray-700">
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    autocomplete="current-password"
-                    required
-                    placeholder="Enter your password"
-                    class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-100"
-                >
-            </div>
+            <!-- CRISPY MAGIC: Replaces the manual username and password divs -->
+            {{ form|crispy }}
 
             <!-- Submit Button -->
             <button

@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm, PhotoUploadForm
-from django.contrib.auth import login, logout
+from django.contrib.auth import login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Photo, PhotoReaction
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm 
 from django.views.decorators.http import require_POST
+
 
 # Create your views here.
 
@@ -94,27 +95,19 @@ def photo_detail(request, photo_id):
 
 
 def login_view(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-
     if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
-        password = request.POST.get('password', '')
-
-        user = authenticate(
-            request,
-            username=username,
-            password=password
-        )
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, 'You have logged in successfully!')
+        # Pass incoming data to the form instance
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            auth_login(request, user)
             return redirect('home')
-
-        messages.error(request, 'Invalid username or password.')
-
-    return render(request, 'login.html')
+    else:
+        # Provide an empty instance for standard GET requests
+        form = AuthenticationForm()
+        
+    # The 'form' context must be named exactly as called in the template
+    return render(request, 'login.html', {'form': form})
 
 def logout_view(request):
     if request.method == 'POST':
